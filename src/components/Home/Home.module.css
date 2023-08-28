@@ -25,15 +25,9 @@
     text-indent: 10px;
 }
 
-/* filter Cont */
-.filterCont {
-    width: 15vw;
-    height: 40vh;
-    border: 2px solid blue;
-    position: fixed;
-    top: 40%;
 
-}
+
+
 
 /* Product details */
 .productCont {
@@ -113,4 +107,7 @@
     border: none;
     background-color: #7064e5;
     color: white;
+}
+.productButton button:hover{
+    cursor: pointer;
 }

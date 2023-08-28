@@ -1,0 +1,57 @@
+
+.filterCont {
+    width: 15vw;
+    height: 45vh;
+    background-color: #f4f6f8 !important;
+    /* outline: none; */
+    border:none;
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     align-items: center;
+    position: fixed;
+    top: 40%;
+    left:2%;
+
+}
+
+.filterCont h2{
+    color: #224957;
+    font-size: 1.8rem;
+}
+
+.priceCont{
+    width:100%;
+    /* border:2px solid red; */
+  
+    
+}
+
+.filterProductCont{
+    width:100%;
+    /* border:2px solid blue; */
+}
+
+.filterPrice{
+  font-size: 1.2rem;
+  text-align: center;
+}
+.filterRangeCont>input{
+    width:100%;
+    margin-top: 10px;
+}
+.filterProductCont h2{
+    text-align: right;
+    color: #224957;
+}
+
+.filterItem input{
+   width:15px;
+   height:15px;
+}
+.filterItem label{
+    font-size:1.1rem;
+    margin-left: 10px;
+    
+   
+}
