@@ -1,7 +1,9 @@
+import { useAuthValue } from '../AuthenticationConext';
 import styles from './SignIn.module.css';
-import { Link } from 'react-router-dom';
+
 
 const SignUp = () => {
+     const {nameRef,emailRef,passwordRef,handleFormAction} = useAuthValue();
 
     return (
         <>
@@ -9,10 +11,10 @@ const SignUp = () => {
            <div className={styles.signUpCont}>
                <h2>Sign Up</h2>
                <form>
-                 <input type='text' placeholder='Enter Name' /><br />
-                 <input type='email' placeholder='Enter Email' /><br/>
-                 <input type='password' placeholder='Enter Password' /><br/>
-                 <button>Sign Up</button>
+                 <input type='text' ref={nameRef} placeholder='Enter Name' /><br />
+                 <input type='email' ref={emailRef} placeholder='Enter Email' /><br/>
+                 <input type='password' ref={passwordRef} placeholder='Enter Password' /><br/>
+                 <button onClick={(e) => handleFormAction(e,2)}>Sign Up</button>
                </form>
               
            </div>

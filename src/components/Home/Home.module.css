@@ -83,12 +83,37 @@
     /* border:2px solid black; */
     font-size: 1.2rem;
     color: #224957;
+    display: flex;
     font-weight: bold;
-    position: absolute;
+   position: absolute;
     bottom: 15%;
     left: 10%;
 }
 
+.prodCnt{
+    width:38%;
+    height:70%;
+    /* border:2px solid red; */
+    display: flex;
+    justify-content: space-between;
+   position: absolute;
+    right:0%;
+
+}
+.prodCnt span{
+    font-size:1.5rem;
+    position: absolute;
+    left:40%;
+    top:-20%;
+}
+.prodCnt img{
+    width:25px;
+    height:25px;
+}
+
+.prodCnt img:hover{
+    cursor: pointer;
+}
 .productButton {
     width: 80%;
     height: 8vh;

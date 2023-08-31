@@ -5,41 +5,57 @@ import Cart from "./pages/Cart";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import Home from "./components/Home/Home";
-import ProductContext from "./ProductStateContext";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import NotFound from "./pages/NotFound";
+import {ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+
+
+} from "react-router-dom";
+import { useAuthValue } from "./AuthenticationConext";
+
 
 function App() {
+  const { loggedIn , signUpSuccess} = useAuthValue();
+    
+   
+ 
   const router = createBrowserRouter([
     {
       path: "/",
+      errorElement:<NotFound />,
       element: <Navbar />,
+     
       children: [
-        {index: true,element: <Home />},
+        { index: true, element: <Home />},
         {
           path: "order",
-          element: <Order />,
+          element: loggedIn ?  <Order /> : <SignIn />,
         },
         {
           path: "cart",
-          element: <Cart />,
+          element: loggedIn ?  <Cart /> : <SignIn />,
         },
         {
           path: "signup",
-          element: <SignUp />,
+          element:signUpSuccess ?  <Navigate to="/signin" replace={true} /> : <SignUp />,
         },
         {
           path: "signin",
-          element: <SignIn />,
+          element:  <SignIn />,
         },
       ],
     },
   ]);
   return (
-    <ProductContext>
-      <div className="App">
-        <RouterProvider router={router} />
-      </div>
-    </ProductContext>
+    <div className="App">
+      <ToastContainer />
+      <RouterProvider router={router} />
+    </div>
   );
 }
 
