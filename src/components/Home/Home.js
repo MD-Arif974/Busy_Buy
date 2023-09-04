@@ -5,17 +5,23 @@ import { useAuthValue } from "../../AuthenticationConext";
 import { useProductValue } from "../../ProductStateContext";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { getAuth } from "firebase/auth";
 
 const Home = () => {
-  const { filterValue, setFilterValue, addProdToCart, cartArr } =
+  const { filterValue, setFilterValue, addProdToCart, cartArr ,totalItemPrice} =
     useProductValue();
-    const {loggedIn,setLoggedIn} = useAuthValue();
+    const {loggedIn,setLoggedIn,setUserName} = useAuthValue();
 
     const navigate = useNavigate();
-
+     
+   
     useEffect(() => {
+     
       const auth = sessionStorage.getItem('Auth Token');
+   
       if(auth) {
+        let name = localStorage.getItem(auth);
+        setUserName(name);
          setLoggedIn(true);
       }
       else{
@@ -56,7 +62,8 @@ const Home = () => {
                    className={styles.productButton}
                    onClick={(e) => addProdToCart(e, item, i)}
                  >
-                   <button>Add to Cart</button>
+               
+                  <button>Add to Cart</button>
                  </div>
                  
                  :

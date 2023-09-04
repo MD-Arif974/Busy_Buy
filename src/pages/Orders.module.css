@@ -1,0 +1,34 @@
+.ordersCont{
+    width:45vw;
+    height:100vh;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.ordersCont table{
+    width:100%;
+    background-color: #f4f6f8;
+}
+.ordersCont table tr{
+   text-align: center;
+  
+}
+.ordersCont table thead tr th{
+    border-bottom: 2px solid #000 !important;
+    border-right: 4px solid #fff;
+    padding:5px;
+}
+.ordersCont table tbody tr td{
+    border-bottom: 4px solid white;
+    border-right: 4px solid white; 
+    padding:5px;
+    /* border:2px solid red; */
+    
+}
+.ordersCont table caption{
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+    color: #224957;
+    font-weight: bold;
+}

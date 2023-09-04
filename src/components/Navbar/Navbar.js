@@ -4,10 +4,12 @@ import styles from './Navbar.module.css';
 import { Outlet, Link } from 'react-router-dom';
 
 const Navbar = () => {
-     const {loggedIn,setLoggedIn,handleLogout} = useAuthValue();
-
+     const {loggedIn,setLoggedIn,handleLogout,userName,} = useAuthValue();
+    
+     
      useEffect(() => {
          const auth = sessionStorage.getItem('Auth Token');
+       
          if(auth) {
             setLoggedIn(true);
          }
@@ -21,6 +23,10 @@ const Navbar = () => {
             <Link to="/">
                <div className={styles.appName}>Busy Buy</div>
             </Link>
+
+          {!loggedIn ? null :  <div className={styles.userName}>
+              {userName}
+            </div>}
             
             <Link to="/">
             <div className={`${loggedIn ?styles.home :styles.homeNotSignin}`}>

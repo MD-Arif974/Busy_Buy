@@ -19,6 +19,14 @@
 .appName:hover{
     cursor: pointer;
 }
+.userName{
+    font-size:1.4rem;
+    color: rgba(137, 43, 226, 0.721);
+    font-weight: bold;
+    position:absolute;
+    left:20%;
+    top:30%;
+}
 
 .home {
     width: 10vw;
