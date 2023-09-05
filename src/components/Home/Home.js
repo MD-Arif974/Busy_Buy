@@ -47,8 +47,8 @@ const Home = () => {
               if (!filterValue) return true;
               if (item.name.includes(filterValue) === true) return true;
             })
-            .map((item, i) => (
-              <div className={styles.productDetails} key={i}>
+            .map((item) => (
+              <div className={styles.productDetails} key={item.id}>
                 <div className={styles.productImg}>
                   <img src={item.icon} alt={item.name} />
                 </div>
@@ -60,7 +60,7 @@ const Home = () => {
                 {loggedIn ? 
                    <div
                    className={styles.productButton}
-                   onClick={(e) => addProdToCart(e, item, i)}
+                   onClick={(e) => addProdToCart(e, item, item.id)}
                  >
                
                   <button>Add to Cart</button>

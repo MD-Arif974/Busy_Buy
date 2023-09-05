@@ -34,7 +34,7 @@ const Cart = () => {
                         cartProdItem(item, item.id, "decrement", item.price)
                       }
                     />
-                    <span>{item.cnt}</span>
+                    <span>{item.qty}</span>
                     <img
                       src="https://cdn-icons-png.flaticon.com/128/1828/1828919.png"
                       alt="increament btn"

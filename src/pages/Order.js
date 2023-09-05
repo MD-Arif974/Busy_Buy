@@ -1,12 +1,40 @@
 import { useProductValue } from "../ProductStateContext";
 import styles from "./Orders.module.css";
 import productList from "../data/data";
+import { useEffect } from "react";
+import {
+  collection,
+  getDocs,
+  
+} from "firebase/firestore";
+import { db } from "../firebaseInit";
 
 const Order = () => {
-  const { cartArr, orderItemPrice,orderArr } = useProductValue();
+  const {orderItemPrice,orderArr,setOrderArr,setOrderItemPrice } = useProductValue();
   let d = new Date();
   let str = JSON.stringify(d);
   let currDate = str.substring(1, 11).split("-").reverse().join("-");
+
+  const getItems = async () => {
+    const docId = sessionStorage.getItem("Auth Token");
+    const querySnapshot = await getDocs(
+      collection(db, "users", docId, "orders")
+    );
+    
+   let currPrice = 0;
+    querySnapshot.docs.map((doc) => {
+      let data = doc.data();
+      data.id = doc.id;
+      currPrice += data.price;
+     orderArr.push(data);
+     setOrderArr(orderArr);
+    });
+
+    setOrderItemPrice(currPrice);
+  };
+  useEffect(() => {
+    getItems();
+  }, []);
 
   return (
     <>
@@ -37,9 +65,9 @@ const Order = () => {
                   <td>
                     <span>&#8377;</span> {productList[item.id].price}
                   </td>
-                  <td>{item.cnt}</td>
+                  <td>{item.qty}</td>
                   <td>
-                    <span>&#8377;</span> {item.price}
+                    <span>&#8377;</span> {item.totalPrice}
                   </td>
                 </tr>
               ))}
