@@ -1,6 +1,8 @@
+import { useProductValue } from "../../ProductStateContext";
 import styles from "./Filter.module.css";
 
 const Filter = () => {
+  const {handleFilterProducts} = useProductValue();
   return (
     <aside className={styles.filterCont}>
       <h2>Filter</h2>
@@ -16,36 +18,40 @@ const Filter = () => {
           <div className={styles.filterItem}>
             <input
               type="checkbox"
-              id="mens-cloths"
+              id="mens-cloth"
               name="FilterProducts"
-              value="mens-cloths"
+              value="mens-cloth"
+              onClick={(e) => handleFilterProducts(e)}
             />
             <label for="mens-cloths">Men's Clothing</label>
           </div>
           <div className={styles.filterItem}>
             <input
               type="checkbox"
-              id="womens-cloths"
+              id="womens-cloth"
               name="FilterProducts"
-              value="womens-cloths"
+              value="womens-cloth"
+              onClick={(e) => handleFilterProducts(e)}
             />
             <label for="womens-cloths">Women's Clothing</label>
           </div>
           <div className={styles.filterItem}>
             <input
               type="checkbox"
-              id="jewelery"
+              id='jewellery'
               name="FilterProducts"
-              value="jewelery"
+              value='jewellery'
+              onClick={(e) => handleFilterProducts(e)}
             />
             <label for="jewelery">Jewelery</label>
           </div>
           <div className={styles.filterItem}>
             <input
               type="checkbox"
-              id="electronics"
+              id='electronics'
               name="FilterProducts"
-              value="electronics"
+              value='electronics'
+              onClick={(e) => handleFilterProducts(e)}
             />
             <label for="electronics">Electronics</label>
           </div>

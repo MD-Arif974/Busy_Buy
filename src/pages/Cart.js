@@ -1,10 +1,50 @@
 import { useProductValue } from "../ProductStateContext";
 import styles from "../components/Home/Home.module.css";
+import {getDocs,collection} from 'firebase/firestore';
+import {db} from '../firebaseInit';
+import { useEffect } from "react";
+import { Navigate } from "react-router-dom";
+
 const Cart = () => {
   const { cartArr, cartProdItem, totalItemPrice, addItemsToOrder 
-,removeItemFromCart
+,removeItemFromCart,setCartArr,setTotalItemPrice,orderPurchased,setOrderPurchased
 } =
     useProductValue();
+
+     
+
+    const getItems = async () => {
+      const docId = sessionStorage.getItem("Auth Token");
+      const querySnapshot = await getDocs(
+        collection(db, "users", docId, "carts")
+      );
+      
+      let currPrice = 0;
+      querySnapshot.docs.map((doc) => {
+        let data = doc.data();
+       if(Object.keys(data).length >  0) {
+          currPrice +=data.price;
+          cartArr.push(data);
+          setCartArr(cartArr);
+       }
+      
+      });
+      
+      setTotalItemPrice(currPrice);
+     
+      
+    };
+    useEffect(() => {
+      if(cartArr.length === 0) {
+        getItems();
+      }
+      
+    }, []);
+
+   if(orderPurchased) {
+       setOrderPurchased(false);
+       return <Navigate to="/order" replace = {true} />
+   }
 
   return (
     <>

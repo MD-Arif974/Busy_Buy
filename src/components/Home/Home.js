@@ -5,7 +5,7 @@ import { useAuthValue } from "../../AuthenticationConext";
 import { useProductValue } from "../../ProductStateContext";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { getAuth } from "firebase/auth";
+
 
 const Home = () => {
   const { filterValue, setFilterValue, addProdToCart, cartArr ,totalItemPrice} =
@@ -45,7 +45,7 @@ const Home = () => {
           {productList
             .filter((item) => {
               if (!filterValue) return true;
-              if (item.name.includes(filterValue) === true) return true;
+              if (item.name.toLocaleLowerCase().includes(filterValue.toLocaleLowerCase()) === true) return true;
             })
             .map((item) => (
               <div className={styles.productDetails} key={item.id}>
