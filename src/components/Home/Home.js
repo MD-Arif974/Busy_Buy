@@ -8,13 +8,15 @@ import { useEffect } from "react";
 
 
 const Home = () => {
-  const { filterValue, setFilterValue, addProdToCart, cartArr ,totalItemPrice} =
+  const { filterValue, setFilterValue, addProdToCart,categoryArr
+    ,filterRangeArr
+  } =
     useProductValue();
     const {loggedIn,setLoggedIn,setUserName} = useAuthValue();
 
     const navigate = useNavigate();
      
-   
+    //  console.log("category",categoryArr);
     useEffect(() => {
      
       const auth = sessionStorage.getItem('Auth Token');
@@ -42,7 +44,8 @@ const Home = () => {
         </div>
         <Filter />
         <div className={styles.productCont}>
-          {productList
+          {
+            categoryArr.length > 0 ?categoryArr
             .filter((item) => {
               if (!filterValue) return true;
               if (item.name.toLocaleLowerCase().includes(filterValue.toLocaleLowerCase()) === true) return true;
@@ -76,7 +79,45 @@ const Home = () => {
               }
                
               </div>
-            ))}
+            )) : 
+
+            filterRangeArr
+            .filter((item) => {
+              if (!filterValue) return true;
+              if (item.name.toLocaleLowerCase().includes(filterValue.toLocaleLowerCase()) === true) return true;
+            })
+            .map((item) => (
+              <div className={styles.productDetails} key={item.id}>
+                <div className={styles.productImg}>
+                  <img src={item.icon} alt={item.name} />
+                </div>
+                <div className={styles.productName}>{item.name}</div>
+                <div className={styles.productPrice}>
+                  <span>&#8377;</span>&nbsp;{item.price}
+                 
+                </div>
+                {loggedIn ? 
+                   <div
+                   className={styles.productButton}
+                   onClick={(e) => addProdToCart(e, item, item.id)}
+                 >
+               
+                  <button>Add to Cart</button>
+                 </div>
+                 
+                 :
+                 <div
+                 className={styles.productButton}
+                 onClick={(e) => navigate('/signin')}
+               >
+                 <button>Add to Cart</button>
+               </div>
+              }
+               
+              </div>
+            ))
+          }
+          
         </div>
       </div>
     </>
