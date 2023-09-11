@@ -9,14 +9,14 @@ import { useEffect } from "react";
 
 const Home = () => {
   const { filterValue, setFilterValue, addProdToCart,categoryArr
-    ,filterRangeArr
+    ,filterRangeArr,setOrderArr
   } =
     useProductValue();
     const {loggedIn,setLoggedIn,setUserName} = useAuthValue();
 
     const navigate = useNavigate();
      
-    //  console.log("category",categoryArr);
+    
     useEffect(() => {
      
       const auth = sessionStorage.getItem('Auth Token');
@@ -24,11 +24,12 @@ const Home = () => {
       if(auth) {
         let name = localStorage.getItem(auth);
         setUserName(name);
-         setLoggedIn(true);
+        setLoggedIn(true);
       }
       else{
          setLoggedIn(false);
       }
+      // setOrderArr([]);
   },[])
 
   return (

@@ -52,6 +52,9 @@
 
 .signInCont button:hover{
     cursor: pointer;
+    background-color: #f4f6f8;
+    color:#7064e5;
+    border:1px solid gray;
 }
 /* sign up cont */
 
@@ -103,6 +106,9 @@
 
 .signUpCont button:hover{
     cursor: pointer;
+    background-color: #f4f6f8;
+    color:#7064e5;
+    border:1px solid gray;
 }
 
 /* Page NotFound style */

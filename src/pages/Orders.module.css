@@ -5,10 +5,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    
 }
 .ordersCont table{
     width:100%;
     background-color: #f4f6f8;
+    margin-bottom: 20px;
 }
 .ordersCont table tr{
    text-align: center;

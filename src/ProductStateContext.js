@@ -1,10 +1,12 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import productListArr from "./data/data";
-import { checkBoxList } from "./data/data";
+import { createContext, useContext,useState } from "react";
+import productListArr from "./data/data";// list of product items stored in array in data file
+import { checkBoxList } from "./data/data"; // list of checkboxes stored in array in data file
 import { toast } from "react-toastify";
+import { db } from "./firebaseInit";
+
+// firebase methods
 import {
   collection,
-  addDoc,
   getDocs,
   doc,
   setDoc,
@@ -12,52 +14,61 @@ import {
   deleteDoc,
   deleteField,
 } from "firebase/firestore";
-import { db } from "./firebaseInit";
 
+
+// creating context
 const productContext = createContext();
 
+
+// creating custom hooks
 export const useProductValue = () => {
   const value = useContext(productContext);
   return value;
 };
 
+
+// creating custom context
 const ProductContext = ({ children }) => {
-  const [filterValue, setFilterValue] = useState("");
-  const [cartArr, setCartArr] = useState([]);
-  let [totalItemPrice, setTotalItemPrice] = useState(0);
-  let [orderArr, setOrderArr] = useState([]);
-  let [orderItemPrice, setOrderItemPrice] = useState(0);
-  let [orderPurchased, setOrderPurchased] = useState(false);
-  let [checkedList, setCheckedList] = useState(checkBoxList);
-  const [categoryArr, setCategoryArr] = useState([]);
-  const [rangeValue, setRangeValue] = useState(75000);
-  let [filterRangeArr, setFilterRangeArr] = useState(productListArr);
-  let [tempArr, setTempArr] = useState([]);
-
-  console.log("temp arr ", tempArr, "filter", filterRangeArr);
-
+  const [filterValue, setFilterValue] = useState("");// value type in input field data is stored in this hook
+  const [cartArr, setCartArr] = useState([]);// cart arr to store all products that is in the cart page
+  let [totalItemPrice, setTotalItemPrice] = useState(0); // to store total item price of cart items
+  let [orderArr, setOrderArr] = useState([]); // order arr to store product list that is in the order page
+  let [orderItemPrice, setOrderItemPrice] = useState(0); // to store total price of each table in order page
+  let [orderPurchased, setOrderPurchased] = useState(false);// to check wheather user purchased items or not
+  let [checkedList, setCheckedList] = useState(checkBoxList);// to store checkboxes that is stored in data file
+  const [categoryArr, setCategoryArr] = useState([]); // category arr to show those items who is matching with the clicked checkboxes
+  const [rangeValue, setRangeValue] = useState(75000); // hook to store range value price
+  let [filterRangeArr, setFilterRangeArr] = useState(productListArr); // filterRange arr to show product lists based on filtered price
+  let [tempArr, setTempArr] = useState([]);// temp arr to store items temporary to store into category arr
+  let [currDayArr,setCurrDayArr] = useState([]);
+  let [priceArr,setPriceArr] = useState([]);
+ 
+  // to get the current data
   let d = new Date();
   let str = JSON.stringify(d);
   let currDay = str.substring(1, 11).split("-").reverse().join("-");
+  
 
-  sessionStorage.setItem("date", currDay);
 
+  // handleFilterRange func to filtered out items based on price range
   const handleFilterRange = (e) => {
     setRangeValue(Math.floor(e.target.value));
-
+    
+    //fetching how many checkboxes have been clicked to filtered out data based on that
     let filteredCategoryArr = checkedList.filter((item) => item.check === true);
 
     if (filteredCategoryArr.length > 0) {
       setFilterRangeArr([]);
       setCategoryArr([]);
-
+      
+      //running loop on filteredCategoryArr and filtering items based on price and category
       for (let i = 0; i < filteredCategoryArr.length; i++) {
         let arr = productListArr.filter(
           (item) =>
             item.price <= e.target.value &&
             item.category === filteredCategoryArr[i].category
         );
-        console.log("arr inside", arr);
+
         tempArr.push(...arr);
       }
 
@@ -73,6 +84,8 @@ const ProductContext = ({ children }) => {
     }
   };
 
+
+  // handleFilterProducts func to filtered items based on clicked checkboxes
   const handleFilterProducts = (e, list) => {
     let ind = checkedList.findIndex((item) => item.id === list.id);
 
@@ -91,21 +104,38 @@ const ProductContext = ({ children }) => {
       setCategoryArr([...categoryArr, ...currArr]);
     }
   };
+  
 
+  // addItemsToOrder func to add all items into the order page
   const addItemsToOrder = async () => {
+     console.log("line 110",orderArr);
+
+    // getting email as id from session storage to store based on user
     const docId = sessionStorage.getItem("Auth Token");
+
+    // creating document in firebase based on current data
     const orderDocRef = await setDoc(
       doc(db, "users", docId, "orders", currDay),
-      {}
+      {
+        id: currDay,
+      }
     );
-
-    console.log("carts", cartArr, "....", "order", orderArr);
+   
+    // mapping cart app products 
     cartArr.map(async (item) => {
+      // prodInd is index of current item to get its actual price
       let prodInd = productListArr.findIndex((prod) => prod.id === item.id);
-
-      let ind = orderArr.findIndex((orderItem) => orderItem.id === item.id);
-      console.log(ind);
-      if (ind >= 0) {
+      
+      console.log("order arr",orderArr);
+      // indArr is to check whether product is present in order page or not 
+      let indArr = orderArr.map((list) =>
+        list.findIndex((orderItem) => orderItem.id === item.id)
+      );
+      
+      
+      // if val >= 0 means items is present, so we just have to update qty and price
+      if (currDayArr[currDayArr.length-1] === currDay && indArr[indArr.length-1] >= 0) { 
+       
         const docId = sessionStorage.getItem("Auth Token");
         const docRef = doc(
           db,
@@ -117,10 +147,11 @@ const ProductContext = ({ children }) => {
           item.id
         );
         await updateDoc(docRef, {
-          qty: orderArr[ind].qty + item.qty,
-          totalPrice: orderArr[ind].totalPrice + item.price,
+          qty: orderArr[orderArr.length -1][indArr[indArr.length -1]].qty + item.qty,
+          totalPrice: orderArr[orderArr.length -1][indArr[indArr.length -1]].totalPrice + item.price,
         });
       } else {
+        // if items is not present we are simply creating new document for product
         const docRef = await setDoc(
           doc(db, "users", docId, "orders", currDay, "orderlists", item.id),
           {
@@ -133,15 +164,15 @@ const ProductContext = ({ children }) => {
         );
       }
 
-      setOrderItemPrice(totalItemPrice + orderItemPrice);
-      setTotalItemPrice(0);
-      setCartArr([]);
+     
     });
-
+  
+    //here we are getting all documents of carts collection
     const querySnapshot = await getDocs(
       collection(db, "users", docId, "carts")
     );
-
+    
+    // after getting all documents of carts collection i am just to delete the field not documents
     querySnapshot.docs.map(async (dbDoc) => {
       if (Object.keys(dbDoc.data()).length > 0) {
         const docRef = doc(db, "users", docId, "carts", dbDoc.data().id);
@@ -154,10 +185,16 @@ const ProductContext = ({ children }) => {
         });
       }
     });
-    setOrderPurchased(true);
-    setOrderArr([]);
-  };
 
+    setOrderItemPrice(totalItemPrice + orderItemPrice);
+    setTotalItemPrice(0);
+    setCartArr([]);
+    setOrderPurchased(true);
+    
+  };
+ 
+
+  // removeItemFromCart func is to remove the items from cart arr when user clicked on remove button of a product list
   const removeItemFromCart = async (e, id) => {
     try {
       const docId = sessionStorage.getItem("Auth Token");
@@ -171,13 +208,15 @@ const ProductContext = ({ children }) => {
       toast.error(error.error);
     }
   };
-
+ 
+  // addTotalPrice func is to add total price of cart arr
   const addTotalPrice = (arr) => {
     let ans = 0;
     arr.map((prod) => (ans += prod.price));
     setTotalItemPrice(ans);
   };
-
+  
+  // updateDocDB func is to update the values based on id on firebase
   const updateDocDB = async (ind, id) => {
     try {
       const docId = sessionStorage.getItem("Auth Token");
@@ -190,7 +229,8 @@ const ProductContext = ({ children }) => {
       toast.error(error.error);
     }
   };
-
+  
+  //cartProdItem func is to increment or decrement qty and price based on user clicked button
   const cartProdItem = async (item, id, op) => {
     try {
       const docId = sessionStorage.getItem("Auth Token");
@@ -226,6 +266,7 @@ const ProductContext = ({ children }) => {
     }
   };
 
+  // addProdToCart func is to add product into cart arr when user clicked on add button from home page
   const addProdToCart = (e, item, id) => {
     e.preventDefault();
 
@@ -266,7 +307,7 @@ const ProductContext = ({ children }) => {
       } catch (error) {
         toast.error("Something went wrong!");
       }
-    }, 500);
+    }, 300);
   };
   return (
     <productContext.Provider
@@ -293,6 +334,10 @@ const ProductContext = ({ children }) => {
         handleFilterRange,
         rangeValue,
         filterRangeArr,
+        currDayArr,
+        setCurrDayArr,
+        priceArr,
+        setPriceArr
       }}
     >
       {children}

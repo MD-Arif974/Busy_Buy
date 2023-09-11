@@ -6,7 +6,7 @@ const Filter = () => {
   const { handleFilterProducts, checkedList,handleFilterRange,rangeValue
   } = useProductValue();
 
- 
+  
   return (
     <aside className={styles.filterCont}>
       <h2>Filter</h2>
@@ -23,25 +23,36 @@ const Filter = () => {
             />
           </div>
         </div>
-        <div className={styles.filterProductCont}>
-          <h2>Category</h2>
-          {checkedList.map((list) => (
-            <>
-              <div className={styles.filterItem} key={list.id}>
+        <h2>Category</h2>
+        {
+          
+        checkedList.map((list,id) => (
+          <div className={styles.filterProductCont} key={list.id}>
+          
+         
+            
+              <div className={styles.filterItem} key={id}>
                 <input
                   type="checkbox"
-                  id={list.id}
+                  id={id}
                   value={list.name}
-                  checked = {list.check}
+                  key={id}
+                  defaultChecked = {list.check}
                   onClick={(e) => handleFilterProducts(e,list)}
                 />
-                <label for="category">{list.value}</label>
+                <label htmlFor="category">{list.value}</label>
               </div>
-            </>
-          ))}
+            
+          
 
           
         </div>
+
+        ))
+
+        
+        
+        }
       </form>
     </aside>
   );

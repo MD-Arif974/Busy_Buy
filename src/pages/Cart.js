@@ -3,18 +3,23 @@ import styles from "../components/Home/Home.module.css";
 import {getDocs,collection} from 'firebase/firestore';
 import {db} from '../firebaseInit';
 import { useEffect } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useAsyncValue } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useAuthValue } from "../AuthenticationConext";
 
 const Cart = () => {
   const { cartArr, cartProdItem, totalItemPrice, addItemsToOrder 
-,removeItemFromCart,setCartArr,setTotalItemPrice,orderPurchased,setOrderPurchased
-} =
-    useProductValue();
+,removeItemFromCart,setCartArr,setTotalItemPrice,orderPurchased
 
+} = useProductValue();
+
+const {setUserName} = useAuthValue();
      
 
     const getItems = async () => {
       const docId = sessionStorage.getItem("Auth Token");
+      const name = localStorage.getItem(docId);
+      
       const querySnapshot = await getDocs(
         collection(db, "users", docId, "carts")
       );
@@ -30,21 +35,23 @@ const Cart = () => {
       
       });
       
+      setUserName(name);
       setTotalItemPrice(currPrice);
-     
+      // setOrderArr([]);
       
     };
     useEffect(() => {
-      if(cartArr.length === 0) {
+       if(cartArr.length === 0)
         getItems();
-      }
+      
       
     }, []);
 
    if(orderPurchased) {
-       setOrderPurchased(false);
+       
        return <Navigate to="/order" replace = {true} />
    }
+   
 
   return (
     <>

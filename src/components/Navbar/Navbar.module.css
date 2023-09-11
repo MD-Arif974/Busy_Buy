@@ -20,12 +20,30 @@
     cursor: pointer;
 }
 .userName{
+    /* border:2px solid blue; */
+    width:10%;
+   position:absolute;
+    right:9%;
+    top:35%;
+
+}
+.userName:hover{
+    cursor: pointer;
+}
+.userName span{
+    /* border:2px solid red; */
     font-size:1.4rem;
     color: rgba(137, 43, 226, 0.721);
     font-weight: bold;
-    position:absolute;
-    left:20%;
-    top:30%;
+    margin-left: 15px;
+    position: absolute;
+    
+    
+}
+.userName img{
+    width:35px;
+    height:35px;
+   
 }
 
 .home {
@@ -132,7 +150,7 @@
     top: 27%;
 }
 
-.auth {
+.login {
     width: 10vw;
     height: auto;
     /* border: 2px solid blue; */
@@ -141,19 +159,46 @@
     right: 8%;
 }
 
-.auth:hover{
+.login:hover{
     cursor: pointer;
 }
-.auth img {
+.login img {
     width: 40px;
     height: 40px;
     margin: 10px;
 }
 
-.auth span {
+.login span {
     font-size: 1.3rem;
     color: rgba(137, 43, 226, 0.721);
     font-weight: bold;
     position: absolute;
     top: 27%;
+}
+
+.logout {
+    width: 8%;
+    height: 40px;
+    border: 1px solid gray;
+    background-color: #f4f6f8;
+    position: absolute;
+    top: 80%;
+    right: 10%;
+}
+
+.logout:hover{
+    cursor: pointer;
+}
+.logout img {
+    width: 35px;
+    height: 35px;
+   
+}
+
+.logout span {
+    font-size: 1.3rem;
+    color: rgba(137, 43, 226, 0.721);
+    font-weight: bold;
+    position: absolute;
+    top: 0%;
 }
