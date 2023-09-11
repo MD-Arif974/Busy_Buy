@@ -1,5 +1,4 @@
 import styles from "./Home.module.css";
-import productList from "../../data/data";
 import Filter from "../Filter/Filter";
 import { useAuthValue } from "../../AuthenticationConext";
 import { useProductValue } from "../../ProductStateContext";
@@ -9,7 +8,7 @@ import { useEffect } from "react";
 
 const Home = () => {
   const { filterValue, setFilterValue, addProdToCart,categoryArr
-    ,filterRangeArr,setOrderArr
+    ,filterRangeArr,loading,setLoading
   } =
     useProductValue();
     const {loggedIn,setLoggedIn,setUserName} = useAuthValue();

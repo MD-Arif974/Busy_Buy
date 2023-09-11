@@ -2,21 +2,24 @@ import { useProductValue } from "../ProductStateContext";
 import styles from "../components/Home/Home.module.css";
 import {getDocs,collection} from 'firebase/firestore';
 import {db} from '../firebaseInit';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Navigate, useAsyncValue } from "react-router-dom";
-import { toast } from "react-toastify";
+import Spinner from 'react-spinner-material';
 import { useAuthValue } from "../AuthenticationConext";
 
 const Cart = () => {
   const { cartArr, cartProdItem, totalItemPrice, addItemsToOrder 
 ,removeItemFromCart,setCartArr,setTotalItemPrice,orderPurchased
+,loading,setLoading
 
 } = useProductValue();
 
 const {setUserName} = useAuthValue();
+
      
 
     const getItems = async () => {
+      setLoading(true);
       const docId = sessionStorage.getItem("Auth Token");
       const name = localStorage.getItem(docId);
       
@@ -37,12 +40,17 @@ const {setUserName} = useAuthValue();
       
       setUserName(name);
       setTotalItemPrice(currPrice);
+      setLoading(false);
       // setOrderArr([]);
       
     };
     useEffect(() => {
-       if(cartArr.length === 0)
+       if(cartArr.length === 0){
+       
         getItems();
+       }
+       
+       
       
       
     }, []);
@@ -52,7 +60,13 @@ const {setUserName} = useAuthValue();
        return <Navigate to="/order" replace = {true} />
    }
    
-
+  if(loading) {
+    return (
+      <div className={styles.loader}>
+        <Spinner  color={"#7064e5"} />
+      </div>
+    );
+  }
   return (
     <>
       {cartArr.length > 0 ? (

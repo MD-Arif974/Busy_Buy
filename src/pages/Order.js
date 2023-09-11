@@ -1,7 +1,8 @@
 import { useProductValue } from "../ProductStateContext";
 import styles from "./Orders.module.css";
-import { useEffect, useState } from "react";
+import { useEffect} from "react";
 import { collection, getDocs } from "firebase/firestore";
+import Spinner from 'react-spinner-material';
 import { db } from "../firebaseInit";
 import { useAuthValue } from "../AuthenticationConext";
 
@@ -9,18 +10,18 @@ const Order = () => {
   const {
     orderArr,
     setOrderArr,
-    orderPurchased,
     setOrderPurchased,
     setCurrDayArr,
     currDayArr,
     setPriceArr,
     priceArr,
+    loading,
+    setLoading,
   } = useProductValue();
   const { setUserName } = useAuthValue();
 
-
-
   const getItems = async () => {
+    setLoading(true);
     const docId = sessionStorage.getItem("Auth Token");
     const name = localStorage.getItem(docId);
 
@@ -42,56 +43,51 @@ const Order = () => {
         arr.push(newData);
       });
 
-      if(arr.length > 0) {
+      if (arr.length > 0) {
         currDayArr.push(data);
         priceArr.push(currPrice);
         orderArr.push([...arr]);
         setPriceArr(priceArr);
-      setCurrDayArr(currDayArr);
-      setOrderArr([...orderArr]);
+        setCurrDayArr(currDayArr);
+        setOrderArr([...orderArr]);
       }
-     
 
       arr = [];
 
-      
       setUserName(name);
       setOrderPurchased(false);
+      setLoading(false);
     });
-     
   };
   useEffect(() => {
-   
-   
-  
-    if ( orderArr.length >= 0) {
-     
-      
+    if (orderArr.length >= 0) {
       let len = orderArr.length;
       for (let i = 0; i < len; i++) {
-       orderArr.splice(0,1);
-       currDayArr.splice(0,1);
-       priceArr.splice(0,1);
-       
+        orderArr.splice(0, 1);
+        currDayArr.splice(0, 1);
+        priceArr.splice(0, 1);
       }
-     
 
       getItems();
     }
-
-    
   }, []);
+
+  if(loading) {
+    return (
+      <div className={styles.loader}>
+        <Spinner  color={"#7064e5"} />
+      </div>
+    );
+  }
 
   return (
     <>
       <div className={styles.ordersCont}>
-        
         {orderArr.length > 0 ? (
           <>
             <h1>Your Orders</h1>
 
             {orderArr.map((list, ind) => {
-              
               return (
                 <table key={ind}>
                   <caption>Ordered On:- {currDayArr[ind]}</caption>

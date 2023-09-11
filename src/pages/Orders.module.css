@@ -34,3 +34,15 @@
     color: #224957;
     font-weight: bold;
 }
+
+.loader{
+    height: 300px;
+    /* border:2px solid red; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position:absolute;
+    top:30%;
+    left:50%;
+    
+}

@@ -42,6 +42,7 @@ const ProductContext = ({ children }) => {
   let [tempArr, setTempArr] = useState([]);// temp arr to store items temporary to store into category arr
   let [currDayArr,setCurrDayArr] = useState([]);
   let [priceArr,setPriceArr] = useState([]);
+  let [loading,setLoading] = useState(false);
  
   // to get the current data
   let d = new Date();
@@ -337,7 +338,9 @@ const ProductContext = ({ children }) => {
         currDayArr,
         setCurrDayArr,
         priceArr,
-        setPriceArr
+        setPriceArr,
+        loading,
+        setLoading
       }}
     >
       {children}
